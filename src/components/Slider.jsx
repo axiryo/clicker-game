@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 
 const Slider = () => {
 
@@ -16,7 +16,13 @@ const Slider = () => {
 
   // const [ isDisabled, setIsDisabled ] = useState(true);
   const [ timer, setTimer ] = useState(1);
+  const [ counter, setCounter ] = useState(timer);
   const [ score, setScore ] = useState(0);
+
+  const setTimerHandler = () => {
+    const timerValue = document.getElementById('slider').value;
+    setTimer(timerValue);
+  }
 
   const clickMeHandler = () => {
     setTimeout(() => {
@@ -27,16 +33,18 @@ const Slider = () => {
     }, (timer * 1000));
   }
 
-  const setTimerHandler = () => {
-    const timerValue = document.getElementById('slider').value;
-    setTimer(timerValue);
-  }
+  useEffect(() => {
+    counter > 0 && setTimeout(() => setCounter(counter - 1), 1000);
+    console.log(counter)
+  }, [counter]);
+  
   return (<>
     <div className='timer-parent'>
       <input id='slider' className='slider' type='range' min={1} max={10} value={timer} onChange={setTimerHandler}/>
       <h1 className='timerDisplay'>{timer}s</h1>
-      <button id='clickMe' type='button' className='btn btn-success btn-lg btn3d' onClick={clickMeHandler} ><label className='clickMe'>Click Me</label></button>
-      <h1 className='timerDisplay'>Your score is: {score}</h1>
+      <button id='clickMe' type='button' className='btn btn-success btn-lg btn3d' onClick={clickMeHandler}><label className='clickMe'>Click Me</label></button>
+      <h1 className='timerDisplay'>Your score is: {score} after {timer}s</h1>
+      <h1 className='timerDisplay'>Countdown: {counter}</h1>
     </div>
   </>);
 }
